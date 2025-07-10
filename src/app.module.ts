@@ -18,7 +18,13 @@ import { Order } from './entities/order.entities';
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         entities: [User, Product, Order],
-        synchronize: true, // Set to false in production
+        synchronize: true, 
+        ssl: true,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false, 
+          },
+        },
       }),
       inject: [ConfigService],
     }),
