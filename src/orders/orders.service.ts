@@ -46,15 +46,29 @@ export class OrdersService {
 
     const savedOrder = await this.orderRepository.save(order);
 
+    const orderSummary = items
+      .map((item) => {
+        const product = products.find((p) => p.id === item.productId);
+        const name = product?.name || 'Unnamed Product';
+        return `${item.quantity}x ${name} ($${item.price.toFixed(2)})`;
+      })
+      .join(', ');
+
+    const message =
+      `Your order #${savedOrder.id} has been placed successfully.\n\n` +
+      `It contains: ${orderSummary}.\n` +
+      `Total: $${total.toFixed(2)}.\n\n` +
+      `Thank you for shopping with us!`;
+
     await this.notificationsService.sendEmail(
       user.email,
       'Order Confirmation',
-      `Your order #${savedOrder.id} for $${total.toFixed(2)} has been placed!`,
+      message,
     );
 
     // await this.notificationsService.sendSMS(
     //   user.phone || '+2349052368651',
-    //   `Order #${savedOrder.id} placed successfully! Total: $${total.toFixed(2)}`,
+    //   message,
     // );
 
     return savedOrder;
