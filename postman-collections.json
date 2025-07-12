@@ -60,6 +60,16 @@
         "method": "GET",
         "url": "{{baseUrl}}/products"
       }
+    },
+    {
+      "name": "Get User",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/profile",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ]
+      }
     }
   ]
 }
